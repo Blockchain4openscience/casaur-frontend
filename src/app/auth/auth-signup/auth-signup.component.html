@@ -1,0 +1,62 @@
+<div class="container">
+	<mat-card *tdLoading="'loading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'primary'">
+		<mat-card-title>Sign Up</mat-card-title>
+		<mat-card-content>
+			<div layout="column">
+				<div layout="column">
+					<div layout="row" *ngIf="successMessage" class="alert alert-success" role="alert">
+						<strong>Success: </strong> {{successMessage}}
+					</div>
+					<div layout="row" *ngIf="errorMessage" class="alert alert-danger" role="alert">
+						<strong>Error: </strong> {{errorMessage}}
+					</div>
+				</div>
+				<div layout="column">
+					<form layout="column" [formGroup]="myForm">
+						<mat-form-field layout="row">
+							<input flex matInput id="email" formControlName="email" type="email" placeholder="Email" required>
+							<mat-error *ngIf="email.invalid && (email.dirty || email.touched)">
+								<span *ngIf="email.errors.required">
+									Email is required.
+								</span>
+								<span *ngIf="email.errors.email">
+									Invalid email pattern.
+								</span>
+							</mat-error>
+						</mat-form-field><!--
+						<mat-form-field layout="row">
+							<input flex matInput id="firstName" formControlName="firstName" type="text" placeholder="First Name" required>
+							<mat-error *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)">
+								<span *ngIf="firstName.errors.required">
+									First Name is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="lastName" formControlName="lastName" type="text" placeholder="Last Name" required>
+							<mat-error *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)">
+								<span *ngIf="lastName.errors.required">
+									Last Name is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="publicKey" formControlName="publicKey" type="text" placeholder="Public Key" required>
+							<mat-error *ngIf="publicKey.invalid && (publicKey.dirty || publicKey.touched)">
+								<span *ngIf="publicKey.errors.required">
+									Public Key is required.
+								</span>
+							</mat-error>
+						</mat-form-field>-->
+					</form>
+				</div>
+			</div>
+		</mat-card-content>
+		<mat-card-actions>
+			<div layout="row" layout-align="center center">
+				<!--<button mat-raised-button color="warn" (click)="closeDialog()">Reset</button>-->
+				<button mat-raised-button color="accent" (click)="addParticipant()">Submit</button>
+			</div>
+		</mat-card-actions>
+	</mat-card>
+</div>

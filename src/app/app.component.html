@@ -1,0 +1,83 @@
+<!--
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<td-layout>
+	<td-navigation-drawer flex [sidenavTitle]="name" name="Firstname Lastname" email="firstname.lastname@company.com">
+		<mat-nav-list>
+			<ng-template ngFor let-item [ngForOf]="routes">
+				<h3 mat-subheader>{{item.title}}</h3>
+				<a *ngFor="let route of item.list" mat-list-item [routerLink]="route.name">{{route.displayName}}</a>
+			</ng-template>
+		</mat-nav-list>
+		<!--<div td-navigation-drawer-menu>-->
+		<!--<mat-nav-list>-->
+		<!--<a *ngFor="let item of usermenu" mat-list-item><mat-icon>{{item.icon}}</mat-icon>{{item.title}}</a>-->
+		<!--</mat-nav-list>-->
+		<!--</div>-->
+	</td-navigation-drawer>
+	<td-layout-nav color="primary" navigationRoute="/">
+		<button mat-icon-button td-menu-button tdLayoutToggle>
+			<mat-icon>menu</mat-icon>
+		</button>
+		<div td-toolbar-content layout="row" layout-align="start center" flex>
+			<span hide-gt-xs class="mat-subhead">Blockdegree</span>
+			<span hide-xs class="mat-subhead">Blockdegree</span>
+			<span flex></span>
+			<div *ngIf="!authService.currentUser" layout="row" layout-align="center end">
+				<a mat-raised-button href="http://localhost:3000/auth/google"><mat-icon>google</mat-icon>Sign in with google</a>
+			</div>
+			<div *ngIf="authService.currentUser" layout="row" layout-align="center end">
+				<span>Hi, {{ authService.currentUser.firstName }} </span>
+				<button mat-raised-button color="accent" (click)="logout()">Logout</button>
+			</div>
+		</div>
+		<mat-toolbar *ngIf="authService.currentUser" class="pad-none push-bottom-md">
+			<nav mat-tab-nav-bar class="pull-bottom-xl pull-top-md text-upper" flex>
+				<a *ngFor="let route of routes" mat-tab-link [routerLink]="route.name">
+					<span>{{route.displayName}}</span>
+				</a>
+				<!--<button mat-tab-link mat-button [matMenuTriggerFor]="assets">Assets</button>-->
+				<!--<button mat-tab-link mat-button [matMenuTriggerFor]="participants">Participants</button>-->
+				<!--<button mat-tab-link mat-button [matMenuTriggerFor]="transactions">Transactions</button>-->
+				<!--<mat-menu #assets="matMenu" [overlapTrigger]="false">-->
+				<!--<a *ngFor="let asset of assetRoutes" mat-tab-link mat-menu-item [routerLink]="asset.name">-->
+				<!--<span hide-xs>{{asset.displayName}}</span>-->
+				<!--<span hide-gt-xs><mat-icon>home</mat-icon></span>-->
+				<!--</a>-->
+				<!--</mat-menu>-->
+				<!--<mat-menu #participants="matMenu" [overlapTrigger]="false">-->
+				<!--<a *ngFor="let participant of participantRoutes" mat-tab-link mat-menu-item [routerLink]="participant.name">-->
+				<!--<span hide-xs>{{participant.displayName}}</span>-->
+				<!--<span hide-gt-xs><mat-icon>home</mat-icon></span>-->
+				<!--</a>-->
+				<!--</mat-menu>-->
+				<!--<mat-menu #transactions="matMenu" [overlapTrigger]="false">-->
+				<!--<a *ngFor="let transaction of transactionRoutes" mat-tab-link mat-menu-item [routerLink]="transaction.name">-->
+				<!--<span hide-xs>{{transaction.displayName}}</span>-->
+				<!--<span hide-gt-xs><mat-icon>home</mat-icon></span>-->
+				<!--</a>-->
+				<!--</mat-menu>-->
+			</nav>
+		</mat-toolbar>
+		<!-- router outlet goes here -->
+		<router-outlet></router-outlet>
+		<!-- end content -->
+		<td-layout-footer>
+			<div layout="row" layout-align="start center">
+				<span class="mat-caption">Made with <mat-icon class="text-md">favorite</mat-icon> using <a
+					href="http://getcovalent.com" class="text-nodecoration tc-blue-700">Covalent</a>, built on Angular v6 + Angular Material.</span>
+			</div>
+		</td-layout-footer>
+	</td-layout-nav>
+</td-layout>

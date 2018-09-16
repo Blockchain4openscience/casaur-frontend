@@ -1,0 +1,56 @@
+<div class="container">
+	<mat-card *tdLoading="'loading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'primary'">
+		<mat-card-title>Verify Certificate</mat-card-title>
+		<mat-card-content>
+			<div layout="column">
+				<div layout="column">
+					<div layout="row" *ngIf="successMessage" class="alert alert-success" role="alert">
+						<strong>Success: </strong> {{successMessage}}
+					</div>
+					<div layout="row" *ngIf="errorMessage" class="alert alert-danger" role="alert">
+						<strong>Error: </strong> {{errorMessage}}
+					</div>
+				</div>
+				<div layout="column">
+					<form layout="column" [formGroup]="myForm">
+						<mat-form-field layout="row">
+							<input flex matInput id="certId" formControlName="certId" type="text" placeholder="Certificate ID" required>
+							<mat-error *ngIf="certId.invalid && (certId.dirty || certId.touched)">
+								<span *ngIf="certId.errors.required">
+									Certificate ID is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+					</form>
+				</div>
+			</div>
+		</mat-card-content>
+		<mat-card-actions>
+			<div layout="row" layout-align="center center">
+				<button mat-raised-button color="accent" (click)="submit()">Submit</button>
+			</div>
+		</mat-card-actions>
+	</mat-card>
+	<mat-card *ngIf="currentCertId">
+		<mat-card-title>
+			Verification Steps of Certificate: <strong>{{currentCertId}}</strong>
+		</mat-card-title>
+		<mat-card-content>
+			<mat-list>
+				<ng-template let-step let-last="last" ngFor [ngForOf]="steps">
+					<mat-list-item>
+						<div matListAvatar>
+							<ng-template tdLoading [tdLoadingUntil]="step.done" tdLoadingStrategy="overlay">
+								<mat-icon matListAvatar *ngIf="!step.done">settings_backup_restore</mat-icon>
+								<mat-icon matListAvatar *ngIf="step.done && step.passed" class="tc-light-green-500">done</mat-icon>
+								<mat-icon matListAvatar *ngIf="step.done && !step.passed" class="tc-red-500">clear</mat-icon>
+							</ng-template>
+						</div>
+						<h3 matLine>{{step.name}}</h3>
+					</mat-list-item>
+					<mat-divider *ngIf="!last"></mat-divider>
+				</ng-template>
+			</mat-list>
+		</mat-card-content>
+	</mat-card>
+</div>

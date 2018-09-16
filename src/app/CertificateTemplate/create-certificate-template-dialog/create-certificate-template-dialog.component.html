@@ -1,0 +1,171 @@
+<div *tdLoading="'loading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'primary'" [style.min-width.px]="600">
+	<h1 mat-dialog-title>Create Certificate Template</h1>
+	<mat-dialog-content>
+		<div layout="column">
+			<div layout="column">
+				<div layout="row" *ngIf="errorMessage" class="alert alert-danger" role="alert">
+					<strong>Error:</strong> {{errorMessage}}
+				</div>
+			</div>
+			<div layout="column">
+				<form layout="column" [formGroup]="certificateTemplateForm">
+					<mat-form-field layout="row">
+						<input flex matInput id="templateId" formControlName="templateId" type="text" placeholder="ID" required>
+						<mat-error *ngIf="templateId.invalid && (templateId.dirty || templateId.touched)">
+							<span *ngIf="templateId.errors.required">
+								ID is required.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field layout="row">
+						<input flex matInput id="administrator" formControlName="administrator" type="text" placeholder="Administrator" required>
+						<mat-error *ngIf="administrator.invalid && (administrator.dirty || administrator.touched)">
+							<span *ngIf="administrator.errors.required">
+								Administrator is required.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<div formGroupName="badge" layout="column">
+						<h5>Badge</h5>
+						<mat-divider flex></mat-divider>
+						<mat-form-field layout="row">
+							<input flex matInput id="badgeId" formControlName="id" type="text" placeholder="ID" required>
+							<mat-error *ngIf="badgeId.invalid && (badgeId.dirty || badgeId.touched)">
+								<span *ngIf="badgeId.errors.required">
+									ID is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="badgeName" formControlName="name" type="text" placeholder="Name" required>
+							<mat-error *ngIf="badgeName.invalid && (badgeName.dirty || badgeName.touched)">
+								<span *ngIf="badgeName.errors.required">
+									Name is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<textarea flex matInput id="badgeDescription" formControlName="description" type="text" placeholder="Description" required></textarea>
+							<mat-error *ngIf="badgeDescription.invalid && (badgeDescription.dirty || badgeDescription.touched)">
+								<span *ngIf="badgeDescription.errors.required">
+									Description is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="badgeImage" formControlName="image" type="text" placeholder="Image">
+							<!--<mat-error *ngIf="badgeImage.invalid && (badgeImage.dirty || badgeImage.touched)">-->
+								<!--<span *ngIf="badgeImage.errors.required">-->
+									<!--Reward is required.-->
+								<!--</span>-->
+							<!--</mat-error>-->
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="badgeCriteria" formControlName="criteria" type="text" placeholder="Criteria">
+							<!--<mat-error *ngIf="badgeCriteria.invalid && (badgeCriteria.dirty || badgeCriteria.touched)">-->
+								<!--<span *ngIf="badgeCriteria.errors.required">-->
+									<!--Reward is required.-->
+								<!--</span>-->
+							<!--</mat-error>-->
+						</mat-form-field>
+						<div formGroupName="issuer" layout="column">
+							<h5>Issuer</h5>
+							<mat-divider flex></mat-divider>
+							<mat-form-field layout="row">
+								<input flex matInput id="issuerId" formControlName="id" type="text" placeholder="ID" required>
+								<mat-error *ngIf="issuerId.invalid && (issuerId.dirty || issuerId.touched)">
+									<span *ngIf="issuerId.errors.required">
+										ID is required.
+									</span>
+								</mat-error>
+							</mat-form-field>
+							<mat-form-field layout="row">
+								<input flex matInput id="issuerName" formControlName="name" type="text" placeholder="Name" required>
+								<mat-error *ngIf="issuerName.invalid && (issuerName.dirty || issuerName.touched)">
+									<span *ngIf="issuerName.errors.required">
+										Name is required.
+									</span>
+								</mat-error>
+							</mat-form-field>
+							<mat-form-field layout="row">
+								<input flex matInput id="issuerUrln" formControlName="urln" type="text" placeholder="URL" required>
+								<mat-error *ngIf="issuerUrln.invalid && (issuerUrln.dirty || issuerUrln.touched)">
+									<span *ngIf="issuerUrln.errors.required">
+										URL is required.
+									</span>
+								</mat-error>
+							</mat-form-field>
+							<mat-form-field layout="row">
+								<input flex matInput id="issuerEmail" formControlName="email" type="email" placeholder="Email" required>
+								<mat-error *ngIf="issuerEmail.invalid && (issuerEmail.dirty || issuerEmail.touched)">
+									<span *ngIf="issuerEmail.errors.required">
+										Email is required.
+									</span>
+									<span *ngIf="issuerEmail.errors.email">
+										Email pattern invalid.
+									</span>
+								</mat-error>
+							</mat-form-field>
+							<mat-form-field layout="row">
+								<input flex matInput id="issuerMenId" formControlName="menid" type="text" placeholder="MEN ID" required>
+								<mat-error *ngIf="issuerMenId.invalid && (issuerMenId.dirty || issuerMenId.touched)">
+									<span *ngIf="issuerMenId.errors.required">
+										MEN ID is required.
+									</span>
+								</mat-error>
+							</mat-form-field>
+							<mat-form-field layout="row">
+								<textarea flex matInput id="issuerDescription" formControlName="description" type="text" placeholder="Description"></textarea>
+								<!--<mat-error *ngIf="issuerDescription.invalid && (issuerDescription.dirty || issuerDescription.touched)">-->
+									<!--<span *ngIf="issuerDescription.errors.required">-->
+										<!--Reward is required.-->
+									<!--</span>-->
+								<!--</mat-error>-->
+							</mat-form-field>
+							<mat-form-field layout="row">
+								<input flex matInput id="issuerImage" formControlName="image" type="text" placeholder="Image">
+								<!--<mat-error *ngIf="issuerImage.invalid && (issuerImage.dirty || issuerImage.touched)">-->
+									<!--<span *ngIf="issuerImage.errors.required">-->
+										<!--Reward is required.-->
+									<!--</span>-->
+								<!--</mat-error>-->
+							</mat-form-field>
+							<div formGroupName="signatureLines" layout="column">
+								<h5>Signature Lines</h5>
+								<mat-divider flex></mat-divider>
+								<mat-form-field layout="row">
+									<input flex matInput id="signatureLinesName" formControlName="name" type="text" placeholder="Name" required>
+									<mat-error *ngIf="signatureLinesName.invalid && (signatureLinesName.dirty || signatureLinesName.touched)">
+										<span *ngIf="signatureLinesName.errors.required">
+											Name is required.
+										</span>
+									</mat-error>
+								</mat-form-field>
+								<mat-form-field layout="row">
+									<input flex matInput id="signatureLinesImage" formControlName="image" type="text" placeholder="Image" required>
+									<mat-error *ngIf="signatureLinesImage.invalid && (signatureLinesImage.dirty || signatureLinesImage.touched)">
+										<span *ngIf="signatureLinesImage.errors.required">
+											Image is required.
+										</span>
+									</mat-error>
+								</mat-form-field>
+								<mat-form-field layout="row">
+									<input flex matInput id="signatureLinesJobTitle" formControlName="jobtitle" type="text" placeholder="Job Title" required>
+									<mat-error *ngIf="signatureLinesJobTitle.invalid && (signatureLinesJobTitle.dirty || signatureLinesJobTitle.touched)">
+										<span *ngIf="signatureLinesJobTitle.errors.required">
+											Job Title is required.
+										</span>
+									</mat-error>
+								</mat-form-field>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</mat-dialog-content>
+	<mat-dialog-actions layout="row" layout-align="center center">
+		<button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
+		<button mat-raised-button color="accent" (click)="addAsset()">Confirm</button>
+	</mat-dialog-actions>
+</div>

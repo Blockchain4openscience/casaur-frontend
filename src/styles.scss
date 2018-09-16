@@ -1,0 +1,38 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/* You can add global styles to this file, and also import other style files */
+
+@import '~@angular/material/theming';
+@import '~@covalent/core/theming/all-theme';
+@import '~angular-mgl-timeline/theme';
+
+// Define a custom typography config that overrides the font-family
+// or any typography level.
+//$typography: mat-typography-config(
+//	$font-family: 'Roboto, monospace',
+//	$headline: mat-typography-level(32px, 48px, 700)
+//);
+
+@include mat-core(); // $typography is an **optional** argument for the mat-core
+
+$primary: mat-palette($mat-indigo, 500, 200, 900);
+$accent:  mat-palette($mat-light-blue, 600, 100, 900);
+
+$warn:    mat-palette($mat-red, 600, 100, 900);
+
+$theme: mat-light-theme($primary, $accent, $warn);
+
+@include angular-material-theme($theme);
+@include covalent-theme($theme); // $typography is an **optional** argument for the covalent-theme
+@include mgl-timeline-theme($theme);

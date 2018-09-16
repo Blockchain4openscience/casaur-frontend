@@ -1,0 +1,85 @@
+<!--
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<div class="container">
+	<mat-card *tdLoading="'loading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'primary'">
+		<mat-card-title>Add Roster</mat-card-title>
+		<mat-card-content>
+			<div layout="column">
+				<div layout="column">
+					<div layout="row" *ngIf="successMessage" class="alert alert-success" role="alert">
+						<strong>Success: </strong> {{successMessage}}
+					</div>
+					<div layout="row" *ngIf="errorMessage" class="alert alert-danger" role="alert">
+						<strong>Error: </strong> {{errorMessage}}
+					</div>
+				</div>
+				<div layout="column">
+					<form layout="column" [formGroup]="myForm">
+						<mat-form-field layout="row">
+							<input flex matInput id="templateId" formControlName="templateId" type="text" placeholder="Template ID" required>
+							<mat-error *ngIf="templateId.invalid && (templateId.dirty || templateId.touched)">
+								<span *ngIf="templateId.errors.required">
+									Template ID is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="localAdministrator" formControlName="localAdministrator" type="text" placeholder="Administrator" required>
+							<mat-error *ngIf="localAdministrator.invalid && (localAdministrator.dirty || localAdministrator.touched)">
+								<span *ngIf="localAdministrator.errors.required">
+									Administrator is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<div layout="row">
+							<mat-form-field tdFileDrop
+															(fileDrop)="rosterFile.setValue($event)"
+															(click)="fileInput.inputElement.click();"
+															(keyup.enter)="fileInput.inputElement.click()"
+															(keyup.delete)="fileInput.clear()"
+															(keyup.backspace)="fileInput.clear()"
+															flex>
+								<input matInput
+											 placeholder="Select roster file"
+											 [value]="rosterFile.value ?  rosterFile.value.name : null"
+											 readonly>
+							</mat-form-field>
+							<button mat-icon-button *ngIf="rosterFile.value" (click)="fileInput.clear()" (keyup.enter)="fileInput.clear()">
+								<mat-icon>cancel</mat-icon>
+							</button>
+							<td-file-input class="push-left-sm push-right-sm" #fileInput formControlName="rosterFile" accept=".csv">
+								<mat-icon>folder</mat-icon>
+								<span class="text-upper">Browse</span>
+							</td-file-input>
+						</div>
+						<mat-error *ngIf="rosterFile.invalid && (rosterFile.dirty || rosterFile.touched)">
+							<span *ngIf="rosterFile.errors.required">
+								Roster File is required.
+							</span>
+							<span *ngIf="rosterFile.errors.forbiddenType">
+								Only CSV files are supported.
+							</span>
+						</mat-error>
+					</form>
+				</div>
+			</div>
+		</mat-card-content>
+		<mat-card-actions>
+			<div layout="row" layout-align="center center">
+				<!--<button mat-raised-button color="warn" (click)="closeDialog()">Reset</button>-->
+				<button mat-raised-button color="accent" (click)="submit()">Submit</button>
+			</div>
+		</mat-card-actions>
+	</mat-card>
+</div>
