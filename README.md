@@ -13,7 +13,7 @@ First we need to intall the version of node and npm that is compatible with comp
 `````
 nvm install 8.9
 `````
-Follow *steps one and two* from the tutorial: 1-Starting a Hyperledger Fabric network; 2-Exploring the Hyperledger Fabric network.
+Follow *steps one and two* from the [tutorial](https://hyperledger.github.io/composer/latest/tutorials/deploy-to-fabric-single-org): 1-Starting a Hyperledger Fabric network; 2-Exploring the Hyperledger Fabric network.
 
 In *step three* create a folder called `certificates` and follow the instructions:
 3-Building a connection profile (copy the example connection profile) and save to the folder `connection.json`.
@@ -45,17 +45,34 @@ In *step ten* we test the connection to the blockchain business network
 composer network ping -c admin@block-degree
 `````
 
+## Creating a external users participant 
+
+Add a external user participant in the business network  
+`````
+composer participant add -c admin@block-degree -d '{"$class":"org.degree.ExternalUser","id": "guest"}'
+`````
+
+Create a business card for external user (use namespace for participant)
+`````
+composer identity issue -u guest -a org.degree.ExternalUser#guest -x true -c admin@block-degree -f guest@block-degree.card 
+`````
+
+Import the business card created in the previous step
+`````
+composer card import -f guest@block-degree.card
+`````
+
 ## Interacting with the business network using the REST server and the Angular application
 
 To allow users to log-in with the google api we need first to install the [passport](http://www.passportjs.org/).
 `````
 npm install -g passport-google-oauth2
 `````
-To create the REST API run the following command: 
+To create the REST API using the guest card run the following command: 
 `````
-composer-rest-server  -c admin@block-degree -n never -p 3001
+composer-rest-server  -c guest@block-degree -n never -p 3001
 `````
-use `admin@block-degree` as the card name.
+use `admin@block-degree` as the card name. User only has access as external user
 
 In a different console we must start a second REST server
 `````
