@@ -110,13 +110,8 @@ export class AppComponent implements AfterViewInit {
 	}
 
 	logout() : void {
-		this.authService.logout()
-		.then(() => {
-			this.router.navigate(['/verify-certificate'])
-		})
-		.then(error=>{
-			console.log(error);
-		})
-
+		//await this.authService.logout();
+		this.authService.currentUser = null;
+		//this.router.navigateByUrl('http://localhost:3000/auth/logout');
 	}
 }

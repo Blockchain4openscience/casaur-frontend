@@ -45,17 +45,17 @@ export class CertificateTemplateComponent implements OnInit {
 	};
 
 	async ngOnInit() {
-		// const isAuthenticated = await this.authService.isAuthenticated();
-		// const hasSignedUp = await this.authService.hasSignedUp();
-		// console.log(isAuthenticated, hasSignedUp);
-		// if (isAuthenticated && hasSignedUp){
-		// 	await this.authService.setCurrentUser();
-		// }
-		// else if (isAuthenticated && !hasSignedUp) {
-		// 	  this.router.navigate(['/signup']);
-		// } else {
-		// 	  this.router.navigate(['/verify-certificate']);
-		// }
+		const isAuthenticated = await this.authService.isAuthenticated();
+		const hasSignedUp = await this.authService.hasSignedUp();
+		console.log(isAuthenticated, hasSignedUp);
+		if (isAuthenticated && hasSignedUp){
+			await this.authService.setCurrentUser();
+		}
+		else if (isAuthenticated && !hasSignedUp) {
+			  this.router.navigate(['/signup']);
+		} else {
+			  this.router.navigate(['/verify-certificate']);
+		}
 		this.loadAll();
 	}
 

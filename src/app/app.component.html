@@ -31,15 +31,15 @@
 			<mat-icon>menu</mat-icon>
 		</button>
 		<div td-toolbar-content layout="row" layout-align="start center" flex>
-			<span hide-gt-xs class="mat-subhead">Blockdegree</span>
-			<span hide-xs class="mat-subhead">Blockdegree</span>
+			<span hide-gt-xs class="mat-subhead">CASAUR</span>
+			<span hide-xs class="mat-subhead">CASAUR</span>
 			<span flex></span>
 			<div *ngIf="!authService.currentUser" layout="row" layout-align="center end">
 				<a mat-raised-button href="http://localhost:3000/auth/google"><mat-icon>google</mat-icon>Sign in with google</a>
 			</div>
 			<div *ngIf="authService.currentUser" layout="row" layout-align="center end">
 				<span>Hi, {{ authService.currentUser.firstName }} </span>
-				<button mat-raised-button color="accent" (click)="logout()">Logout</button>
+				<a mat-raised-button color="accent" href="http://localhost:3000/auth/logout">Logout</a>
 			</div>
 		</div>
 		<mat-toolbar *ngIf="authService.currentUser" class="pad-none push-bottom-md">
