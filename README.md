@@ -1,4 +1,4 @@
-# Digital Degree (degree-bnav2:frontend)
+# Digital Certificates (CASAUR-frontend)
 
 A proof of concept (PoC) of a permissioned blockchain for verifiable digital diplomas base on the [Blockcerts](https://www.blockcerts.org/about.html) open standard. Digital diplomas are a transparent way of verifying professional or educational accomplishments for a global workforce and it’s a first step toward supplying the full record of a learning experience (transcripts, projects,..). Blockcerts is an open-source project initially led by MIT’s media lab and Learning Machine. Blockcerts focus has been on issuing the certificates on Bitcoin and Ethereum. Our goal is to extend the certification process in a permissioned blockchain using the Hyperledger framework and tools. The initial aim is to build a ledger of digital diplomas to be deployed for a university and extend its possibilities to other institutions.
 
@@ -45,9 +45,9 @@ In *step ten* we test the connection to the blockchain business network
 composer network ping -c admin@casaur
 `````
 
-## Interacting with the business network using the REST server and the Angular application
+## Interacting with the business network using the REST server 
 
-To allow users to log-in with the google api we need first to install the [passport](http://www.passportjs.org/).
+To allow users to log-in with the google api we need first to install (you only need to do this once) the [passport](http://www.passportjs.org/).
 `````
 npm install -g passport-google-oauth2
 `````
@@ -65,6 +65,18 @@ export COMPOSER_PROVIDERS='{    "google": {        "provider": "google",        
 composer-rest-server -c admin@casaur -n never -a true -m true -w true
 `````
 use `admin@casaur` as the card name.
+
+## Creating an administrator participant
+The administrator participant will have writing privileges over the ledger, that is he will create templates and personalize the templates (issue the certificates). For log-in (log-out) this user with the google api we must first create the participant in the business network using composer CLI  
+`````
+composer participant add -c admin@casaur -d '
+{"$class":"org.degree.Administrator","email":"ccastroiragorri@gmail.com","firstName":"carlos","lastName": "castro","publicKey": "carlosPK"}'
+`````
+or using the composer playground
+`````
+composer-playground
+`````
+## Front-end based on Angular application
 
 In order to build the user interfaces for this busness network please clone the repository and follow the instructions
 
@@ -87,6 +99,14 @@ and navigate to `http://localhost:4200/`. The app will automatically reload if y
 
 Once the app is loaded log-in with gmail account and create administrator then follow the instructions to create the certificate template, personalize the certificates and verify the certificates. Use the [example](https://github.com/Blockchain4openscience/casaur) designed for the hyperledger playground to test the functionality of the business network using the bna deployed onto fabric and the frontends. 
 
+Note: in order for the log-out to work on the front-end we must modify the composer-rest-server source code:
+First, navigate to the file home/nvm/versions/node/v8.9.0/lib/node_modules/composer-rest-server/server/server.js
+on line 162 (//Add a GET handler for logging out.) it should say,
+`````
+res.redirect('http://localhost:4200/');
+`````
+This guarantees that when logging out form the administrator it will return to the external user view. External user are only able to verify existing certificates using the id. 
+
 ## Destroy a previous set up
 After testing the bna desgined with Composer and deployed onto Fabric it is important to tidy up by stopping fabric. Navigate to the folder where you initially started the Hyperledger Fabric network.
 
@@ -98,10 +118,16 @@ delete the composer cards
 `````
 composer card delete -c name
 `````
+delete the file sytem card store
+`````
+rm -fr ~/.composer
+`````
 and clear the docker cointainers.
 
 `````
-docker kill $(docker ps -q)
-docker rm $(docker ps -aq)
+./teardownAllDocker.sh
+`````
+Select option 1- Kill and remove only the containers. Then delete the images created, 
+`````
 docker rmi $(docker images dev-* -q)
 `````
