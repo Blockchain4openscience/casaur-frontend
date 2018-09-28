@@ -30,13 +30,15 @@ export class AddRosterComponent implements OnInit {
 
 	myForm: FormGroup;
 	templateId = new FormControl(null, Validators.required);
-	localAdministrator = new FormControl(this.authService.currentUser.email, Validators.required);
+	administrator = new FormControl(null, Validators.required);
+	certificateType = new FormControl(null, Validators.required);
 	rosterFile = new FormControl(null, [Validators.required, this.fileTypeValidator()]);
 
 	file: File;
 
 	private Transaction;
 	private errorMessage;
+	private successMessage;
 
 	constructor(private serviceAddRoster: AddRosterService,
 							private loadingService: TdLoadingService,
@@ -45,10 +47,11 @@ export class AddRosterComponent implements OnInit {
 							fb: FormBuilder) {
 		this.myForm = fb.group({
 			templateId: this.templateId,
-			localAdministrator: this.localAdministrator,
-			rosterFile: this.rosterFile,
+			administrator: this.administrator,
+			certificateType: this.certificateType,
+			rosterFile: this.rosterFile
 		});
-		this.localAdministrator.disable();
+		this.administrator.disable();
 	};
 
 	async ngOnInit() {
@@ -57,8 +60,8 @@ export class AddRosterComponent implements OnInit {
 		console.log(isAuthenticated, hasSignedUp);
 		if (isAuthenticated && hasSignedUp){
 			await this.authService.setCurrentUser();
-		}
-		else if (isAuthenticated && !hasSignedUp) {
+			this.administrator.setValue(this.authService.currentUser.email);
+		} else if (isAuthenticated && !hasSignedUp) {
 				this.router.navigate(['/signup']);
 		} else {
 				this.router.navigate(['/verify-certificate']);
@@ -91,33 +94,45 @@ export class AddRosterComponent implements OnInit {
 	}
 
 	async submit(): Promise<any> {
+		let successfulParse = true;
 		this.errorMessage = null;
+		this.successMessage = null;
 		if (this.myForm.valid) {
 			this.registerLoading();
 			this.Transaction = {
 				$class: 'org.degree.AddRoster',
 				'templateId': this.templateId.value,
-				'localAdministrator': this.authService.currentUser.email,
+				'administrator': this.authService.currentUser.email,
 				'recipientsInfo': await this.parseRosterFile(this.rosterFile.value)
+					.catch((error) => {
+						this.errorMessage = error;
+						successfulParse = false;
+					})
 			};
 
 			console.log(this.Transaction.recipientsInfo);
 
-			this.serviceAddRoster.addTransaction(this.Transaction)
-				.subscribe(() => {
-					this.errorMessage = null;
-					this.myForm.reset();
-					this.rosterFile.markAsUntouched();
-					this.rosterFile.markAsPristine();
-					this.resolveLoading();
-				}, (error) => {
-					if (error === 'Server error') {
-						this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-					} else {
-						this.errorMessage = error;
-					}
-					this.resolveLoading();
-				});
+			if (successfulParse)
+			{
+				this.serviceAddRoster.addTransaction(this.Transaction)
+					.subscribe(() => {
+						this.errorMessage = null;
+						this.myForm.reset();
+						this.rosterFile.markAsUntouched();
+						this.rosterFile.markAsPristine();
+						this.successMessage = `Successfully issued ${this.Transaction.recipientsInfo.length} certificate(s)`;
+						this.resolveLoading();
+					}, (error) => {
+						if (error === 'Server error') {
+							this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+						} else {
+							this.errorMessage = error;
+						}
+						this.resolveLoading();
+					});
+			} else {
+				this.resolveLoading();
+			}
 		} else {
 			Object.keys(this.myForm.controls).forEach(field => {
 				const control = this.myForm.get(field);
@@ -133,23 +148,99 @@ export class AddRosterComponent implements OnInit {
 				complete: (results, f) => {
 					const data = results.data;
 					const recipientsInfo = [];
-					for (let i = 0; i < data.length; i++) {
-						if (data[i].length === 4) {
-							const recpientInfo = {
-								certId: data[i][0],
-								recipient: {
-									email: data[i][1],
-								},
-								recipientProfile: {
-									name: data[i][2],
-									publicKey: data[i][3]
+					switch (this.certificateType.value) {
+						case 'ParticipacionPrograma':
+						{
+							for (let i = 0; i < data.length; i++) {
+								if (data[i].length === 8) {
+									const recpientInfo = {
+										certId: data[i][0],
+										recipient: {
+											email: data[i][1],
+										},
+										recipientProfile: {
+											name: data[i][2],
+											publicKey: data[i][3],
+											legalId: data[i][4],
+											assertions: {
+												program: data[i][5],
+												firtsDate: data[i][6],
+												lastDate: data[i][7]
+											}
+										}
+									};
+									recipientsInfo.push(recpientInfo);
+								} else {
+									reject(new Error('Malformed CSV file.'));
 								}
-							};
-							recipientsInfo.push(recpientInfo);
-						} else {
-							this.errorMessage = 'Malformed CSV file.';
-							break;
+							}
 						}
+						break;
+
+						case 'RequisitoIdioma':
+						{
+							for (let i = 0; i < data.length; i++) {
+								if (data[i].length === 9) {
+									const recpientInfo = {
+										certId: data[i][0],
+										recipient: {
+											email: data[i][1],
+										},
+										recipientProfile: {
+											name: data[i][2],
+											publicKey: data[i][3],
+											legalId: data[i][4],
+											assertions: {
+												program: data[i][5],
+												language: {
+													option: data[i][6],
+													languageReq: data[i][7],
+													englishReq: data[i][8]
+												}
+											}
+										}
+									};
+									recipientsInfo.push(recpientInfo);
+								} else {
+									reject(new Error('Malformed CSV file.'));
+								}
+							}
+						}
+						break;
+
+						case 'SancionDisciplinaria':
+						{
+							for (let i = 0; i < data.length; i++) {
+								if (data[i].length === 12) {
+									const recpientInfo = {
+										certId: data[i][0],
+										recipient: {
+											email: data[i][1],
+										},
+										recipientProfile: {
+											name: data[i][2],
+											publicKey: data[i][3],
+											legalId: data[i][4],
+											assertions: {
+												program: data[i][5],
+												discipline: {
+													sanction: data[i][6],
+													periods: data[i][7],
+													fault: data[i][8],
+													firtsDate: data[i][9],
+													faultDate: data[i][10],
+													processId: data[i][11]
+												}
+											}
+										}
+									};
+									recipientsInfo.push(recpientInfo);
+								} else {
+									reject(new Error('Malformed CSV file.'));
+								}
+							}
+						}
+						break;
 					}
 					resolve(recipientsInfo);
 				},

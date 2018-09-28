@@ -18,10 +18,10 @@
 			<div layout="column">
 				<div layout="column">
 					<div layout="row" *ngIf="successMessage" class="alert alert-success" role="alert">
-						<strong>Success: </strong> {{successMessage}}
+						{{successMessage}}
 					</div>
 					<div layout="row" *ngIf="errorMessage" class="alert alert-danger" role="alert">
-						<strong>Error: </strong> {{errorMessage}}
+						{{errorMessage}}
 					</div>
 				</div>
 				<div layout="column">
@@ -35,13 +35,26 @@
 							</mat-error>
 						</mat-form-field>
 						<mat-form-field layout="row">
-							<input flex matInput id="localAdministrator" formControlName="localAdministrator" type="text" placeholder="Administrator" required>
-							<mat-error *ngIf="localAdministrator.invalid && (localAdministrator.dirty || localAdministrator.touched)">
-								<span *ngIf="localAdministrator.errors.required">
+							<input flex matInput id="administrator" formControlName="administrator" type="text" placeholder="Administrator" required>
+							<mat-error *ngIf="administrator.invalid && (administrator.dirty || administrator.touched)">
+								<span *ngIf="administrator.errors.required">
 									Administrator is required.
 								</span>
 							</mat-error>
 						</mat-form-field>
+						<div layout="column">
+							<span class="pad-bottom-xs"><strong>Certificado Type</strong></span>
+							<mat-radio-group formControlName="certificateType" layout="row">
+								<mat-radio-button class="pad-right-sm" value="ParticipacionPrograma">Participación Programa</mat-radio-button>
+								<mat-radio-button class="pad-right-sm" value="RequisitoIdioma">Requisito Idioma</mat-radio-button>
+								<mat-radio-button value="SancionDisciplinaria">Sanción Disciplinaria</mat-radio-button>
+							</mat-radio-group>
+							<mat-error *ngIf="certificateType.invalid && (certificateType.dirty || certificateType.touched)">
+									<span *ngIf="certificateType.errors.required">
+										Certificate Type is required.
+									</span>
+							</mat-error>
+						</div>
 						<div layout="row">
 							<mat-form-field tdFileDrop
 															(fileDrop)="rosterFile.setValue($event)"
