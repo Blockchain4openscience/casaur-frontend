@@ -84,23 +84,4 @@ export class AuthService {
 				return this.administratorService.getParticipant(id).toPromise();
 			});
 	}
-
-	logout(): void {
-		const Http = new XMLHttpRequest();
-		Http.open("GET", 'http://localhost:3000/auth/logout');
-		Http.send();
-		Http.onreadystatechange = (e) => {
-			console.log(Http.responseText);
-			this.currentUser = null;
-		};
-		// return this.httpClient.get('http://localhost:3000/auth/logout').toPromise()
-		// 	.then((result) => {
-		// 		this.currentUser = null;
-		// 	})
-		// 	.catch(error => {
-		// 		console.log('asdasd');
-		// 		console.log(error);
-		// 		return error.status;
-		// 	});
-	}
 }

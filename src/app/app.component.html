@@ -35,11 +35,11 @@
 			<span hide-xs class="mat-subhead">CASAUR</span>
 			<span flex></span>
 			<div *ngIf="!authService.currentUser" layout="row" layout-align="center end">
-				<a mat-raised-button href="http://localhost:3000/auth/google"><mat-icon>google</mat-icon>Sign in with google</a>
+				<a mat-raised-button href="/auth/google"><mat-icon>google</mat-icon>Sign in with google</a>
 			</div>
 			<div *ngIf="authService.currentUser" layout="row" layout-align="center end">
-				<span>Hi, {{ authService.currentUser.firstName }} </span>
-				<a mat-raised-button color="accent" href="http://localhost:3000/auth/logout">Logout</a>
+				<span class="pad-right-md">Hi, {{ authService.currentUser.firstName }} </span>
+				<a mat-raised-button color="accent" href="/auth/logout">Logout</a>
 			</div>
 		</div>
 		<mat-toolbar *ngIf="authService.currentUser" class="pad-none push-bottom-md">
