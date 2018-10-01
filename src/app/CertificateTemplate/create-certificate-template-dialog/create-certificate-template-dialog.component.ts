@@ -15,8 +15,8 @@ export class CreateCertificateTemplateDialogComponent implements OnInit {
 
 	certificateTemplateForm: FormGroup;
 	templateId = new FormControl(null, Validators.required);
-	//administrator = new FormControl(this.authService.currentUser.email, Validators.required);
-	administrator = new FormControl("admin@admin.com", Validators.required);
+	administrator = new FormControl(this.authService.currentUser.email, Validators.required);
+	// administrator = new FormControl("admin@admin.com", Validators.required);
 	// typeC = new FormControl(null, Validators.required);
 	// context = new FormControl(null, Validators.required);
 	// revoked = new FormControl(null, Validators.required);

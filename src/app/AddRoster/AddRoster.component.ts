@@ -153,6 +153,7 @@ export class AddRosterComponent implements OnInit {
 						{
 							for (let i = 0; i < data.length; i++) {
 								if (data[i].length === 8) {
+									// console.log(new Date(data[i][6]));
 									const recpientInfo = {
 										certId: data[i][0],
 										recipient: {
