@@ -70,7 +70,7 @@ use `admin@casaur` as the card name.
 The administrator participant will have writing privileges over the ledger, that is he will create templates and personalize the templates (issue the certificates). For log-in (log-out) this user with the google api we must first create the participant in the business network using composer CLI  
 `````
 composer participant add -c admin@casaur -d '
-{"$class":"org.degree.Administrator","email":"ccastroiragorri@gmail.com","firstName":"carlos","lastName": "castro","publicKey": "carlosPK"}'
+{"$class":"org.degree.Administrator","email":"admin@admin.com","firstName":"Juan","lastName": "Admin","publicKey": "adminPK"}'
 `````
 or using the composer playground
 `````
