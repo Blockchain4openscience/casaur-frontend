@@ -10,6 +10,14 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {CertificateTemplate} from '../org.degree';
 
+declare var require: any;
+
+var pdfmake = require('pdfmake/build/pdfmake.js');
+var fonts = require('pdfmake/build/vfs_fonts.js');
+
+pdfmake.vfs = fonts.pdfMake.vfs
+
+
 @Component({
 	selector: 'app-verify-certificate',
 	templateUrl: './verify-certificate.component.html',
@@ -22,6 +30,7 @@ export class VerifyCertificateComponent implements OnInit {
 	errorMessage: string;
 	successMessage: string;
 	templateId: string;
+	certificateTemplate: any
 
 	private personalCertificateHistory: any[] = [];
 	private administratorHistory: any[] = [];
@@ -102,6 +111,7 @@ export class VerifyCertificateComponent implements OnInit {
 		this.steps[1].passed = false;
 		if (this.myForm.valid) {
 			this.registerLoading();
+			this.personalCertificateHistory = [];
 			this.verifyCertificateService.getAsset(this.certId.value).subscribe(
 				(result) => {
 					this.currentCertId = this.certId.value;
@@ -110,7 +120,7 @@ export class VerifyCertificateComponent implements OnInit {
 					this.templateId = this.templateId.substring(this.templateId.indexOf("#") + 1, this.templateId.length);
 					this.errorMessage = null;
 					this.successMessage = null;
-					this.verifyHash(result);	
+					this.verifyHash(result);
 				},
 				(error) => {
 					if (error === 'Server error') {
@@ -120,6 +130,7 @@ export class VerifyCertificateComponent implements OnInit {
 					}
 					this.resolveLoading();
 				}, () => {
+					
 					const transaction = {
 						$class: 'org.degree.PersonalCertificateHistory',
 						'certId': this.certId.value
@@ -144,7 +155,78 @@ export class VerifyCertificateComponent implements OnInit {
 										};
 										this.personalCertificateHistory.push(record);
 									}
-								  console.log(this.personalCertificateHistory);
+								  console.log(this.personalCertificateHistory);	
+								  this.verifyCertificateService.getCertificateTemplate(this.templateId).subscribe(
+										(result) => {
+											this.certificateTemplate = result;
+											let name = this.personalCertificateHistory[0]['value']['recipientProfile ']['name '];
+											let legalid = this.personalCertificateHistory[0]['value']['recipientProfile ']['legalId '];
+											let program = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['program '];
+											let firtsdate = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['firtsDate '];
+											let lastdate = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['lastDate '];
+											let description = this.certificateTemplate['badge']['description'];
+											description = description.replace(/ \$/g, " ${");
+											description = description.replace(/\$ /g,"} ");
+											description = description.replace(/\$\,/g,"},");
+											description = description.replace(/\$\./g,"}.");
+											console.log(description);
+											description = eval('`'+description+'`');
+											var docDefinition = {
+												content: [
+													// {
+													// 	image: 'sampleImage.jpg',
+													// 	width: 100,
+													// 	height: 100,
+													// 	alignment: 'right'
+													// },
+													{	
+														text: this.certificateTemplate['badge']['issuer']['name'],
+														style: 'header',
+														alignment: 'center'
+													},
+													'\n\n',
+													{
+														text: this.certificateTemplate['badge']['name'],
+														alignment: 'center'
+													},
+													'\n\n\n\n',
+													{
+														text: description,
+														alignment: 'justify'
+													},
+													'\n',
+													{
+														text: this.certificateTemplate['badge']['criteria'],
+														alignment: 'justify'
+													},
+													'\n\n\n\n',
+													// {
+													// 	image: 'sampleImage.jpg',
+													// 	width: 100,
+													// 	height: 40,
+													// 	alignment: 'left'
+													// },
+													{
+														text: this.certificateTemplate['badge']['issuer']['signatureLines']['name'],
+														bold: true
+													},
+													{
+														text: this.certificateTemplate['badge']['issuer']['signatureLines']['jobtitle'],
+														bold: true
+													}
+												],
+												styles: {
+													header: {
+														fontSize: 18,
+														bold: true,
+														alignment: 'justify'
+													}
+												}
+											};
+											var win = window.open('', '_blank');
+											pdfmake.createPdf(docDefinition).open({}, win);
+										}
+									);
 								},
 								(error) => {
 									if (error === 'Server error') {
@@ -213,7 +295,7 @@ export class VerifyCertificateComponent implements OnInit {
 									}
 									this.resolveLoading();
 								});
-						});
+						});						
 				});
 		} else {
 			Object.keys(this.myForm.controls).forEach(field => {

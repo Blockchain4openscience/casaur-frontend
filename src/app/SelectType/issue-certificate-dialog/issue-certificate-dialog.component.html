@@ -1,0 +1,96 @@
+<div *tdLoading="'loading1'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'primary'" [style.min-width.px]="600">
+	<h1 mat-dialog-title>Participación Programa</h1>
+	<mat-dialog-content>
+		<div layout="column">
+			<div layout="column">
+				<div layout="row" *ngIf="errorMessage" class="alert alert-danger" role="alert">
+					<strong>Error:</strong> {{errorMessage}}
+				</div>
+			</div>
+			<div layout="column">
+				<form layout="column" [formGroup]="issueCertificateForm">
+					<mat-form-field layout="row">
+						<input flex matInput id="certID" formControlName="certID" type="text" placeholder="ID" required>
+						<mat-error *ngIf="certID.invalid && (certID.dirty || certID.touched)">
+							<span *ngIf="certID.errors.required">
+								ID is required.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field layout="row">
+						<input flex matInput id="administrator" formControlName="administrator" type="text" placeholder="Administrator" required>
+						<mat-error *ngIf="administrator.invalid && (administrator.dirty || administrator.touched)">
+							<span *ngIf="administrator.errors.required">
+								Administrator is required.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<div formGroupName="recipient" layout="column">
+						<h5>Recipient</h5>
+						<mat-divider flex></mat-divider>
+						<mat-form-field layout="row">
+							<input flex matInput id="recipientName" formControlName="name" type="text" placeholder="Name" required>
+							<mat-error *ngIf="recipientName.invalid && (recipientName.dirty || recipientName.touched)">
+								<span *ngIf="recipientName.errors.required">
+									Name is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="recipientEmail" formControlName="email" type="text" placeholder="E-mail" required>
+							<mat-error *ngIf="recipientEmail.invalid && (recipientEmail.dirty || recipientEmail.touched)">
+								<span *ngIf="recipientEmail.errors.required">
+									Email is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="recipientPK" formControlName="publicKey" type="text" placeholder="Public Key">
+							<mat-error *ngIf="recipientPK.invalid && (recipientPK.dirty || recipientPK.touched)">
+								<span *ngIf="recipientPK.errors.required">
+									Public Key is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="recipientID" formControlName="recipientID" type="text" placeholder="Recipient ID">
+							<mat-error *ngIf="recipientID.invalid && (recipientID.dirty || recipientID.touched)">
+								<span *ngIf="recipientID.errors.required">
+									Recipient ID is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="recipientProgram" formControlName="program" type="text" placeholder="Program">
+							<mat-error *ngIf="recipientProgram.invalid && (recipientProgram.dirty || recipientProgram.touched)">
+								<span *ngIf="recipientProgram.errors.required">
+									Program is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="firstDate" formControlName="firstDate" type="text" placeholder="Initial Date">
+							<mat-error *ngIf="firstDate.invalid && (firstDate.dirty || firstDate.touched)">
+								<span *ngIf="firstDate.errors.required">
+									Initial Date is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="lastDate" formControlName="lastDate" type="text" placeholder="Final Date">
+							<mat-error *ngIf="lastDate.invalid && (lastDate.dirty || lastDate.touched)">
+								<span *ngIf="lastDate.errors.required">
+									Final Date is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+					</div>
+				</form>
+			</div>
+		</div>
+	</mat-dialog-content>
+	<mat-dialog-actions layout="row" layout-align="center center">
+		<button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
+		<button mat-raised-button color="accent" (click)="addAsset()">Confirm</button>
+	</mat-dialog-actions>
+</div>

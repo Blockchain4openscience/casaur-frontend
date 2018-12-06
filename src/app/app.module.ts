@@ -26,7 +26,10 @@ import {MglTimelineModule} from 'angular-mgl-timeline';
 import {VerifyCertificateComponent} from './verify-certificate/verify-certificate.component';
 import {CertificateTemplateComponent} from './CertificateTemplate/CertificateTemplate.component';
 import { CreateCertificateTemplateDialogComponent } from './CertificateTemplate/create-certificate-template-dialog/create-certificate-template-dialog.component';
+import { IssueCertificateDialogComponent } from './SelectType/issue-certificate-dialog/issue-certificate-dialog.component';
 import {AddRosterComponent} from './AddRoster/AddRoster.component';
+import {IssueCertificatesComponent} from './IssueCertificates/IssueCertificates.component';
+import {SelectTypeComponent} from './SelectType/SelectType.component'
 import { AuthCallbackComponent } from './auth/auth-callback/auth-callback.component';
 import { AuthSignupComponent } from './auth/auth-signup/auth-signup.component';
 import { CookieService } from 'ngx-cookie-service';
@@ -40,12 +43,16 @@ import { CookieService } from 'ngx-cookie-service';
 		CertificateTemplateComponent,
 		VerifyCertificateComponent,
 		AddRosterComponent,
+		IssueCertificatesComponent,
+		SelectTypeComponent,
 		CreateCertificateTemplateDialogComponent,
+		IssueCertificateDialogComponent,
 		AuthCallbackComponent,
 		AuthSignupComponent
 	],
 	entryComponents: [
-		CreateCertificateTemplateDialogComponent
+		CreateCertificateTemplateDialogComponent,
+		IssueCertificateDialogComponent
 	],
 	imports: [
 		BrowserModule,

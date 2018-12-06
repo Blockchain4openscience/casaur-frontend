@@ -19,14 +19,18 @@ import {HomeComponent} from './home/home.component';
 import {VerifyCertificateComponent} from './verify-certificate/verify-certificate.component';
 import {CertificateTemplateComponent} from './CertificateTemplate/CertificateTemplate.component';
 import {AddRosterComponent} from './AddRoster/AddRoster.component';
+import {IssueCertificatesComponent} from './IssueCertificates/IssueCertificates.component';
 import {AuthCallbackComponent} from './auth/auth-callback/auth-callback.component';
 import {AuthSignupComponent} from './auth/auth-signup/auth-signup.component';
+import {SelectTypeComponent} from './SelectType/SelectType.component'
 
 const routes: Routes = [
 	// { path: 'transaction', component: TransactionComponent },
 	{path: '', component: HomeComponent},
 	{path: 'certificate-templates', component: CertificateTemplateComponent},
-	{path: 'issue-certificates', component: AddRosterComponent},
+	{path: 'issue-certificates', component: IssueCertificatesComponent},
+	{path: 'select-type', component: SelectTypeComponent},
+	{path: 'add-roster', component: AddRosterComponent},
 	{path: 'verify-certificate', component: VerifyCertificateComponent},
 	{path: 'callback', component: AuthCallbackComponent},
 	{path: 'signup', component: AuthSignupComponent},
