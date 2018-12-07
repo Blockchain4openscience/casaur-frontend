@@ -5,6 +5,7 @@ import {AdministratorHistory, PersonalCertificate, PersonalCertificateHistory, C
 import {DataService} from '../data.service';
 import {HistorianRecord} from "../org.hyperledger.composer.system";
 import {take, catchError, map} from "rxjs/operators";
+import { ReadVarExpr } from '@angular/compiler';
 
 @Injectable({
 	providedIn: 'root'

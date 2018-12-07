@@ -14,15 +14,9 @@
 <div class="container">
 	<mat-card *tdLoading="'loading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'primary'">
 		<mat-card-title>Issue Certificates</mat-card-title>
-		<mat-card-actions>
-			<div layout="row" layout-align="center center">
-				<div class="column">
-					<button mat-raised-button color="accent" (click)="route('addR')">Add Roster</button>
-				</div>
-				<div class="column">
-					<button mat-raised-button color="accent" (click)="route('issueC')">Issue Certificate</button>
-				</div>
-			</div>
+		<mat-card-actions layout="row" layout-align="center justify">
+			<button mat-raised-button color="accent" (click)="route('addR')">Add Roster</button>
+			<button mat-raised-button color="accent" (click)="route('issueC')">Issue Certificate</button>
 		</mat-card-actions>
 	</mat-card>
 </div>
