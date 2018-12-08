@@ -10,6 +10,14 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {CertificateTemplate} from '../org.degree';
 
+declare var require: any;
+
+var pdfmake = require('pdfmake/build/pdfmake.js');
+var fonts = require('pdfmake/build/vfs_fonts.js');
+
+pdfmake.vfs = fonts.pdfMake.vfs
+
+
 @Component({
 	selector: 'app-verify-certificate',
 	templateUrl: './verify-certificate.component.html',
@@ -22,6 +30,7 @@ export class VerifyCertificateComponent implements OnInit {
 	errorMessage: string;
 	successMessage: string;
 	templateId: string;
+	certificateTemplate: any
 
 	private personalCertificateHistory: any[] = [];
 	private administratorHistory: any[] = [];
@@ -102,6 +111,7 @@ export class VerifyCertificateComponent implements OnInit {
 		this.steps[1].passed = false;
 		if (this.myForm.valid) {
 			this.registerLoading();
+			this.personalCertificateHistory = [];
 			this.verifyCertificateService.getAsset(this.certId.value).subscribe(
 				(result) => {
 					this.currentCertId = this.certId.value;
@@ -110,7 +120,7 @@ export class VerifyCertificateComponent implements OnInit {
 					this.templateId = this.templateId.substring(this.templateId.indexOf("#") + 1, this.templateId.length);
 					this.errorMessage = null;
 					this.successMessage = null;
-					this.verifyHash(result);	
+					this.verifyHash(result);
 				},
 				(error) => {
 					if (error === 'Server error') {
@@ -120,6 +130,7 @@ export class VerifyCertificateComponent implements OnInit {
 					}
 					this.resolveLoading();
 				}, () => {
+					
 					const transaction = {
 						$class: 'org.degree.PersonalCertificateHistory',
 						'certId': this.certId.value
@@ -144,7 +155,7 @@ export class VerifyCertificateComponent implements OnInit {
 										};
 										this.personalCertificateHistory.push(record);
 									}
-								  console.log(this.personalCertificateHistory);
+								  console.log(this.personalCertificateHistory);	
 								},
 								(error) => {
 									if (error === 'Server error') {
@@ -213,7 +224,7 @@ export class VerifyCertificateComponent implements OnInit {
 									}
 									this.resolveLoading();
 								});
-						});
+						});						
 				});
 		} else {
 			Object.keys(this.myForm.controls).forEach(field => {
@@ -248,6 +259,158 @@ export class VerifyCertificateComponent implements OnInit {
 
 	resolveLoading(key = 'loading'): void {
 		this.loadingService.resolve(key);
+	}
+
+	toDataURL(url, callback): void {
+		var xhr = new XMLHttpRequest();
+		xhr.onload = function() {
+		  var reader = new FileReader();
+		  reader.onloadend = function() {
+			callback(reader.result);
+			}
+		  reader.readAsDataURL(xhr.response);
+		};
+		xhr.open('GET', url);
+		xhr.responseType = 'blob';
+		xhr.send();
+	}
+
+	viewPDF(): void{
+		console.log('View PDF');
+		this.verifyCertificateService.getCertificateTemplate(this.templateId).subscribe(
+			(result) => {
+				this.certificateTemplate = result;
+				let name = this.personalCertificateHistory[0]['value']['recipientProfile ']['name '];
+				let legalid = this.personalCertificateHistory[0]['value']['recipientProfile ']['legalId '];
+				let program = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['program '];
+				let firtsdate = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['firtsDate '];
+				let lastdate = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['lastDate '];
+				let description = this.certificateTemplate['badge']['description'];
+				// for placeholders in this format: $placeholder$, uncomment
+				// description = description.replace(/ \$/g, " ${");
+				// description = description.replace(/\$ /g,"} ");
+				// description = description.replace(/\$\,/g,"},");
+				// description = description.replace(/\$\./g,"}.");
+				// console.log(description);
+								
+				let today = new Date();
+				let day = today.getDate();
+				let month = today.getMonth();
+				let year = today.getFullYear();
+
+				var monthNames = [
+					"Enero", "Febrero", "Marzo",
+					"Abril", "Mayo", "Junio", "Julio",
+					"Agosto", "Septiembre", "Octubre",
+					"Noviembre", "Diciembre"
+				  ];
+
+				let timestamp = day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
+				firtsdate = firtsdate.replace(".000Z ","Z");
+				let date = new Date(firtsdate);
+				console.log('Date:'+ date);
+				day = date.getDate();
+				month = date.getMonth();
+				year = date.getFullYear();
+				
+				firtsdate = 'el ' + day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
+				
+				lastdate = lastdate.replace(".000Z ","Z");
+				date = new Date(lastdate);
+				day = date.getDate();
+				month = date.getMonth();
+				year = date.getFullYear();
+				
+				lastdate = 'el ' + day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
+				
+				let criteria = this.certificateTemplate['badge']['criteria'];
+				// for placeholders in this format: $placeholder$, uncomment
+				// criteria = criteria.replace(/ \$/g, " ${");
+				// criteria = criteria.replace(/\$ /g,"} ");
+				// criteria = criteria.replace(/\$\,/g,"},");
+				// criteria = criteria.replace(/\$\./g,"}.");
+				// console.log(criteria);
+				description = eval('`'+description+'`');
+				criteria = eval('`'+criteria+'`');
+
+				this.toDataURL(this.certificateTemplate['badge']['issuer']['image'], (dataURL) => {
+					//console.log(dataURL);
+					this.toDataURL(this.certificateTemplate['badge']['issuer']['signatureLines']['image'], (dataURL2) => {
+						//console.log(dataURL2);
+						var docDefinition = {
+							content: [
+								{
+									image: dataURL,
+									width: 150,
+									alignment: 'right'
+								},
+								{	
+									text: this.certificateTemplate['badge']['issuer']['name'].toUpperCase(),
+									style: 'header',
+									alignment: 'center'
+								},
+								{
+									text: this.certificateTemplate['badge']['issuer']['menid'],
+									fontSize: 8,
+									alignment: 'center'
+								},
+								{
+									text: this.certificateTemplate['badge']['issuer']['id'],
+									alignment: 'center'
+								},
+								'\n\n',
+								{
+									text: this.certificateTemplate['badge']['name'].toUpperCase()+':',
+									bold: true,
+									alignment: 'center'
+								},
+								'\n\n\n\n',
+								{
+									text: description,
+									alignment: 'justify'
+								},
+								'\n',
+								{
+									text: criteria,
+									alignment: 'justify'
+								},
+								'\n\n\n\n',
+								{
+									image: dataURL2,
+									width: 100,
+									height: 40,
+									alignment: 'left'
+								},
+								{
+									text: this.certificateTemplate['badge']['issuer']['signatureLines']['name'],
+									bold: true
+								},
+								{
+									text: this.certificateTemplate['badge']['issuer']['signatureLines']['jobtitle'],
+									bold: true
+								}
+							],
+							styles: {
+								header: {
+									fontSize: 18,
+									bold: true,
+									alignment: 'justify'
+								}
+							}
+						};
+						var win = window.open('', '_blank');
+						pdfmake.createPdf(docDefinition).open({}, win);
+					});	
+				});
+											
+			},
+			(error) => {
+				if (error === 'Server error') {
+					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+				} else {
+					this.errorMessage = error;
+				}
+			});
 	}
 
 }

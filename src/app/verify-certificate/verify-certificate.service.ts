@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs/index';
-import {AdministratorHistory, PersonalCertificate, PersonalCertificateHistory} from '../org.degree';
+import {AdministratorHistory, PersonalCertificate, PersonalCertificateHistory, CertificateTemplate} from '../org.degree';
 import {DataService} from '../data.service';
 import {HistorianRecord} from "../org.hyperledger.composer.system";
 import {take, catchError, map} from "rxjs/operators";
+import { ReadVarExpr } from '@angular/compiler';
 
 @Injectable({
 	providedIn: 'root'
@@ -17,6 +18,7 @@ export class VerifyCertificateService {
 
 	  constructor(private dataService2: DataService<PersonalCertificateHistory>,
 				  private administratorHistoryService: DataService<AdministratorHistory>,
+				  private certificateTemplateService: DataService<CertificateTemplate>,
 				  private httpClient: HttpClient){
 						this.headers = new HttpHeaders({
 							'Content-Type': 'application/json',
@@ -26,6 +28,10 @@ export class VerifyCertificateService {
 			
 	public getAsset(certId: any): Observable<any> {
 		return this.httpClient.get('http://localhost:3001/api/PersonalCertificate/' + certId);
+	}
+
+	getCertificateTemplate(templateId: string): Observable<CertificateTemplate> {
+		return this.httpClient.get<CertificateTemplate>('http://localhost:3001/api/CertificateTemplate/' + templateId);
 	}
 
 	requestPersonalCertificateHistory(itemToAdd: any): Observable<PersonalCertificateHistory> {

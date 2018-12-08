@@ -1,0 +1,69 @@
+<!--
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<div class="container">
+	<mat-card *tdLoading="'loading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'primary'">
+		<mat-card-title>Select Type of Certificate</mat-card-title>
+		<mat-card-content>
+			<div layout="column">
+				<div layout="column">
+					<div layout="row" *ngIf="successMessage" class="alert alert-success" role="alert">
+						{{successMessage}}
+					</div>
+					<div layout="row" *ngIf="errorMessage" class="alert alert-danger" role="alert">
+						{{errorMessage}}
+					</div>
+				</div>
+				<div layout="column">
+					<form layout="column" [formGroup]="myForm">
+						<mat-form-field layout="row">
+							<input flex matInput id="templateId" formControlName="templateId" type="text" placeholder="Template ID" required>
+							<mat-error *ngIf="templateId.invalid && (templateId.dirty || templateId.touched)">
+								<span *ngIf="templateId.errors.required">
+									Template ID is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="administrator" formControlName="administrator" type="text" placeholder="Administrator" required>
+							<mat-error *ngIf="administrator.invalid && (administrator.dirty || administrator.touched)">
+								<span *ngIf="administrator.errors.required">
+									Administrator is required.
+								</span>
+							</mat-error>
+						</mat-form-field>
+						<div layout="column">
+							<span class="pad-bottom-xs"><strong>Certificado Type</strong></span>
+							<mat-radio-group formControlName="certificateType" layout="row">
+								<mat-radio-button class="pad-right-sm" value="ParticipacionPrograma">Participación Programa</mat-radio-button>
+								<mat-radio-button class="pad-right-sm" value="RequisitoIdioma">Requisito Idioma</mat-radio-button>
+								<mat-radio-button value="SancionDisciplinaria">Sanción Disciplinaria</mat-radio-button>
+							</mat-radio-group>
+							<mat-error *ngIf="certificateType.invalid && (certificateType.dirty || certificateType.touched)">
+									<span *ngIf="certificateType.errors.required">
+										Certificate Type is required.
+									</span>
+							</mat-error>
+						</div>
+					</form>
+				</div>
+			</div>
+		</mat-card-content>
+		<mat-card-actions>
+			<div layout="row" layout-align="center center">
+				<!--<button mat-raised-button color="warn" (click)="closeDialog()">Reset</button>-->
+				<button mat-raised-button color="accent" (click)="openIssueCertificateDialog()">Issue</button>
+			</div>
+		</mat-card-actions>
+	</mat-card>
+</div>
