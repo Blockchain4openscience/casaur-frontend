@@ -15,36 +15,35 @@
 import {Injectable} from '@angular/core';
 import {DataService} from '../../data.service';
 import {Observable} from 'rxjs';
-import {PersonalCertificate} from '../../org.degree';
+import {PersonalizeCertificate} from '../../org.degree';
 
 // Can be injected into a constructor
 @Injectable()
 export class IssueCertificateDialogService {
 
 
-	private NAMESPACE: string = 'PersonalCertificate';
-
-
-	constructor(private dataService: DataService<PersonalCertificate>) {
+	private NAMESPACE: string = 'PersonalizeCertificate';
+	
+	constructor(private dataService: DataService<PersonalizeCertificate>) {
 	};
 
-	public getAll(): Observable<PersonalCertificate[]> {
+	public getAll(): Observable<PersonalizeCertificate[]> {
 		return this.dataService.getAll(this.NAMESPACE);
 	}
 
-	public getAsset(id: any): Observable<PersonalCertificate> {
+	public getTransaction(id: any): Observable<PersonalizeCertificate> {
 		return this.dataService.getSingle(this.NAMESPACE, id);
 	}
 
-	public addAsset(itemToAdd: any): Observable<PersonalCertificate> {
+	public addTransaction(itemToAdd: any): Observable<PersonalizeCertificate> {
 		return this.dataService.add(this.NAMESPACE, itemToAdd);
 	}
 
-	public updateAsset(id: any, itemToUpdate: any): Observable<PersonalCertificate> {
+	public updateTransaction(id: any, itemToUpdate: any): Observable<PersonalizeCertificate> {
 		return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
 	}
 
-	public deleteAsset(id: any): Observable<PersonalCertificate> {
+	public deleteTransaction(id: any): Observable<PersonalizeCertificate> {
 		return this.dataService.delete(this.NAMESPACE, id);
 	}
 

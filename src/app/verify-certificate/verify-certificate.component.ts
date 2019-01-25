@@ -280,128 +280,368 @@ export class VerifyCertificateComponent implements OnInit {
 		this.verifyCertificateService.getCertificateTemplate(this.templateId).subscribe(
 			(result) => {
 				this.certificateTemplate = result;
-				let name = this.personalCertificateHistory[0]['value']['recipientProfile ']['name '];
-				let legalid = this.personalCertificateHistory[0]['value']['recipientProfile ']['legalId '];
-				let program = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['program '];
-				let firtsdate = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['firtsDate '];
-				let lastdate = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['lastDate '];
-				let description = this.certificateTemplate['badge']['description'];
-				// for placeholders in this format: $placeholder$, uncomment
-				// description = description.replace(/ \$/g, " ${");
-				// description = description.replace(/\$ /g,"} ");
-				// description = description.replace(/\$\,/g,"},");
-				// description = description.replace(/\$\./g,"}.");
-				// console.log(description);
-								
-				let today = new Date();
-				let day = today.getDate();
-				let month = today.getMonth();
-				let year = today.getFullYear();
+				switch (this.certificateTemplate['badge']['id']) {
+					// Conducta sin Antecedentes_Inactivo
+					case 'Conducta sin Antecedentes_Inactivo':
+					{
+						let name = this.personalCertificateHistory[0]['value']['recipientProfile ']['name '];
+						let legalid = this.personalCertificateHistory[0]['value']['recipientProfile ']['legalId '];
+						let program = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['program '];
+						let firtsdate = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['firtsDate '];
+						let lastdate = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['lastDate '];
+						let description = this.certificateTemplate['badge']['description'];
+						// for placeholders in this format: $placeholder$, uncomment
+						// description = description.replace(/ \$/g, " ${");
+						// description = description.replace(/\$ /g,"} ");
+						// description = description.replace(/\$\,/g,"},");
+						// description = description.replace(/\$\./g,"}.");
+						// console.log(description);
+										
+						let today = new Date();
+						let day = today.getDate();
+						let month = today.getMonth();
+						let year = today.getFullYear();
 
-				var monthNames = [
-					"Enero", "Febrero", "Marzo",
-					"Abril", "Mayo", "Junio", "Julio",
-					"Agosto", "Septiembre", "Octubre",
-					"Noviembre", "Diciembre"
-				  ];
+						var monthNames = [
+							"Enero", "Febrero", "Marzo",
+							"Abril", "Mayo", "Junio", "Julio",
+							"Agosto", "Septiembre", "Octubre",
+							"Noviembre", "Diciembre"
+						];
 
-				let timestamp = day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
-				firtsdate = firtsdate.replace(".000Z ","Z");
-				let date = new Date(firtsdate);
-				console.log('Date:'+ date);
-				day = date.getDate();
-				month = date.getMonth();
-				year = date.getFullYear();
-				
-				firtsdate = 'el ' + day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
-				
-				lastdate = lastdate.replace(".000Z ","Z");
-				date = new Date(lastdate);
-				day = date.getDate();
-				month = date.getMonth();
-				year = date.getFullYear();
-				
-				lastdate = 'el ' + day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
-				
-				let criteria = this.certificateTemplate['badge']['criteria'];
-				// for placeholders in this format: $placeholder$, uncomment
-				// criteria = criteria.replace(/ \$/g, " ${");
-				// criteria = criteria.replace(/\$ /g,"} ");
-				// criteria = criteria.replace(/\$\,/g,"},");
-				// criteria = criteria.replace(/\$\./g,"}.");
-				// console.log(criteria);
-				description = eval('`'+description+'`');
-				criteria = eval('`'+criteria+'`');
+						let timestamp = day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
+						firtsdate = firtsdate.replace(".000Z ","Z");
+						let date = new Date(firtsdate);
+						console.log('Date:'+ date);
+						day = date.getDate();
+						month = date.getMonth();
+						year = date.getFullYear();
+						
+						firtsdate = 'el ' + day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
+						
+						lastdate = lastdate.replace(".000Z ","Z");
+						date = new Date(lastdate);
+						day = date.getDate();
+						month = date.getMonth();
+						year = date.getFullYear();
+						
+						lastdate = 'el ' + day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
+						
+						let criteria = this.certificateTemplate['badge']['criteria'];
+						// for placeholders in this format: $placeholder$, uncomment
+						// criteria = criteria.replace(/ \$/g, " ${");
+						// criteria = criteria.replace(/\$ /g,"} ");
+						// criteria = criteria.replace(/\$\,/g,"},");
+						// criteria = criteria.replace(/\$\./g,"}.");
+						// console.log(criteria);
+						description=description.replace(/\${name}/,name);
+						description = eval('`'+description+'`');
+						criteria = eval('`'+criteria+'`');
 
-				this.toDataURL(this.certificateTemplate['badge']['issuer']['image'], (dataURL) => {
-					//console.log(dataURL);
-					this.toDataURL(this.certificateTemplate['badge']['issuer']['signatureLines']['image'], (dataURL2) => {
-						//console.log(dataURL2);
-						var docDefinition = {
-							content: [
-								{
-									image: dataURL,
-									width: 150,
-									alignment: 'right'
-								},
-								{	
-									text: this.certificateTemplate['badge']['issuer']['name'].toUpperCase(),
-									style: 'header',
-									alignment: 'center'
-								},
-								{
-									text: this.certificateTemplate['badge']['issuer']['menid'],
-									fontSize: 8,
-									alignment: 'center'
-								},
-								{
-									text: this.certificateTemplate['badge']['issuer']['id'],
-									alignment: 'center'
-								},
-								'\n\n',
-								{
-									text: this.certificateTemplate['badge']['name'].toUpperCase()+':',
-									bold: true,
-									alignment: 'center'
-								},
-								'\n\n\n\n',
-								{
-									text: description,
-									alignment: 'justify'
-								},
-								'\n',
-								{
-									text: criteria,
-									alignment: 'justify'
-								},
-								'\n\n\n\n',
-								{
-									image: dataURL2,
-									width: 100,
-									height: 40,
-									alignment: 'left'
-								},
-								{
-									text: this.certificateTemplate['badge']['issuer']['signatureLines']['name'],
-									bold: true
-								},
-								{
-									text: this.certificateTemplate['badge']['issuer']['signatureLines']['jobtitle'],
-									bold: true
-								}
-							],
-							styles: {
-								header: {
-									fontSize: 18,
-									bold: true,
-									alignment: 'justify'
-								}
-							}
-						};
-						var win = window.open('', '_blank');
-						pdfmake.createPdf(docDefinition).open({}, win);
-					});	
-				});
+						this.toDataURL(this.certificateTemplate['badge']['issuer']['image'], (dataURL) => {
+							//console.log(dataURL);
+							this.toDataURL(this.certificateTemplate['badge']['issuer']['signatureLines']['image'], (dataURL2) => {
+								//console.log(dataURL2);
+								var docDefinition = {
+									content: [
+										{
+											image: dataURL,
+											width: 150,
+											alignment: 'right'
+										},
+										{	
+											text: this.certificateTemplate['badge']['issuer']['name'].toUpperCase(),
+											style: 'header',
+											alignment: 'center'
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['menid'],
+											fontSize: 8,
+											alignment: 'center'
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['id'],
+											alignment: 'center'
+										},
+										'\n\n',
+										{
+											text: this.certificateTemplate['badge']['name'].toUpperCase()+':',
+											bold: true,
+											alignment: 'center'
+										},
+										'\n\n\n\n',
+										{
+											text: description,
+											alignment: 'justify'
+										},
+										'\n',
+										{
+											text: criteria,
+											alignment: 'justify'
+										},
+										'\n\n\n\n',
+										{
+											image: dataURL2,
+											width: 100,
+											height: 40,
+											alignment: 'left'
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['signatureLines']['name'],
+											bold: true
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['signatureLines']['jobtitle'],
+											bold: true
+										}
+									],
+									styles: {
+										header: {
+											fontSize: 18,
+											bold: true,
+											alignment: 'justify'
+										}
+									}
+								};
+								var win = window.open('', '_blank');
+								pdfmake.createPdf(docDefinition).open({}, win);
+							});	
+						});
+					}
+					break;
+					case 'Tercera Lengua (certifica cumplimiento del requisito)':
+					{
+						let name = this.personalCertificateHistory[0]['value']['recipientProfile ']['name '];
+						let legalid = this.personalCertificateHistory[0]['value']['recipientProfile ']['legalId '];
+						let program = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['program '];
+						let opcion = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['language ']['option '];
+						let idiomareq = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['language ']['languageReq '];
+						let description = this.certificateTemplate['badge']['description'];
+
+						if(opcion==true)
+						{
+							opcion='2';
+						}
+						else
+						{
+							opcion='1';
+						}
+										
+						let today = new Date();
+						let day = today.getDate();
+						let month = today.getMonth();
+						let year = today.getFullYear();
+
+						var monthNames = [
+							"Enero", "Febrero", "Marzo",
+							"Abril", "Mayo", "Junio", "Julio",
+							"Agosto", "Septiembre", "Octubre",
+							"Noviembre", "Diciembre"
+						];
+
+						let timestamp = day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
+						
+						let criteria = this.certificateTemplate['badge']['criteria'];
+						
+						description=description.replace(/\${name}/,name);
+						description = eval('`'+description+'`');
+						criteria = eval('`'+criteria+'`');
+
+						this.toDataURL(this.certificateTemplate['badge']['issuer']['image'], (dataURL) => {
+							//console.log(dataURL);
+							this.toDataURL(this.certificateTemplate['badge']['issuer']['signatureLines']['image'], (dataURL2) => {
+								//console.log(dataURL2);
+								var docDefinition = {
+									content: [
+										{
+											image: dataURL,
+											width: 150,
+											alignment: 'right'
+										},
+										{	
+											text: this.certificateTemplate['badge']['issuer']['name'].toUpperCase(),
+											style: 'header',
+											alignment: 'center'
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['menid'],
+											fontSize: 8,
+											alignment: 'center'
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['id'],
+											alignment: 'center'
+										},
+										'\n\n',
+										{
+											text: this.certificateTemplate['badge']['name'].toUpperCase()+':',
+											bold: true,
+											alignment: 'center'
+										},
+										'\n\n\n\n',
+										{
+											text: description,
+											alignment: 'justify'
+										},
+										'\n',
+										{
+											text: criteria,
+											alignment: 'justify'
+										},
+										'\n\n\n\n',
+										{
+											image: dataURL2,
+											width: 100,
+											height: 40,
+											alignment: 'left'
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['signatureLines']['name'],
+											bold: true
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['signatureLines']['jobtitle'],
+											bold: true
+										}
+									],
+									styles: {
+										header: {
+											fontSize: 18,
+											bold: true,
+											alignment: 'justify'
+										}
+									}
+								};
+								var win = window.open('', '_blank');
+								pdfmake.createPdf(docDefinition).open({}, win);
+							});	
+						});
+					}
+					break;
+					// Conducta con Antecedentes_Activo
+					case 'Conducta con Antecedentes_Activo':
+					{
+						let name = this.personalCertificateHistory[0]['value']['recipientProfile ']['name '];
+						let legalid = this.personalCertificateHistory[0]['value']['recipientProfile ']['legalId '];
+						let program = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['program '];
+						let sanction = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['discipline ']['sanction '];
+						let periods = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['discipline ']['periods '];
+						let firstdate = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['discipline ']['firtsDate '];
+						let fault = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['discipline ']['fault ']
+						let faultdate = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['discipline ']['faultDate ']
+						let processid = this.personalCertificateHistory[0]['value']['recipientProfile ']['assertions ']['discipline ']['processId ']
+						let description = this.certificateTemplate['badge']['description'];
+
+						let today = new Date();
+						let day = today.getDate();
+						let month = today.getMonth();
+						let year = today.getFullYear();
+
+						var monthNames = [
+							"Enero", "Febrero", "Marzo",
+							"Abril", "Mayo", "Junio", "Julio",
+							"Agosto", "Septiembre", "Octubre",
+							"Noviembre", "Diciembre"
+						];
+
+						let timestamp = day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
+
+						firstdate = firstdate.replace(".000Z ","Z");
+						let date = new Date(firstdate);
+						console.log('Date:'+ date);
+						day = date.getDate();
+						month = date.getMonth();
+						year = date.getFullYear();
+						
+						firstdate = 'el ' + day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
+						
+						faultdate = faultdate.replace(".000Z ","Z");
+						date = new Date(faultdate);
+						day = date.getDate();
+						month = date.getMonth();
+						year = date.getFullYear();
+						
+						faultdate = 'el ' + day.toString() + ' de ' + monthNames[month] + ' de ' + year.toString();
+						
+						let criteria = this.certificateTemplate['badge']['criteria'];
+						
+						description=description.replace(/\${name}/,name);
+						description = eval('`'+description+'`');
+						criteria = eval('`'+criteria+'`');
+
+						this.toDataURL(this.certificateTemplate['badge']['issuer']['image'], (dataURL) => {
+							//console.log(dataURL);
+							this.toDataURL(this.certificateTemplate['badge']['issuer']['signatureLines']['image'], (dataURL2) => {
+								//console.log(dataURL2);
+								var docDefinition = {
+									content: [
+										{
+											image: dataURL,
+											width: 150,
+											alignment: 'right'
+										},
+										{	
+											text: this.certificateTemplate['badge']['issuer']['name'].toUpperCase(),
+											style: 'header',
+											alignment: 'center'
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['menid'],
+											fontSize: 8,
+											alignment: 'center'
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['id'],
+											alignment: 'center'
+										},
+										'\n\n',
+										{
+											text: this.certificateTemplate['badge']['name'].toUpperCase()+':',
+											bold: true,
+											alignment: 'center'
+										},
+										'\n\n\n\n',
+										{
+											text: description,
+											alignment: 'justify'
+										},
+										'\n',
+										{
+											text: criteria,
+											alignment: 'justify'
+										},
+										'\n\n\n\n',
+										{
+											image: dataURL2,
+											width: 100,
+											height: 40,
+											alignment: 'left'
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['signatureLines']['name'],
+											bold: true
+										},
+										{
+											text: this.certificateTemplate['badge']['issuer']['signatureLines']['jobtitle'],
+											bold: true
+										}
+									],
+									styles: {
+										header: {
+											fontSize: 18,
+											bold: true,
+											alignment: 'justify'
+										}
+									}
+								};
+								var win = window.open('', '_blank');
+								pdfmake.createPdf(docDefinition).open({}, win);
+							});	
+						});
+					}
+					break;
+				}
+				
 											
 			},
 			(error) => {

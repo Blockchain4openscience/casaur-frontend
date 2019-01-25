@@ -33,7 +33,7 @@ describe('SelecTypeComponent', () => {
 				ReactiveFormsModule,
 				HttpModule
 			],
-			providers: [DataService, Configuration]
+			providers: [DataService, Configuration] 
 		})
 			.compileComponents();
 	}));

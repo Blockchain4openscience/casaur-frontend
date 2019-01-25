@@ -70,19 +70,36 @@
 						</mat-form-field>
 						<mat-form-field layout="row">
 							<input flex matInput id="firstDate" formControlName="firstDate" type="text" placeholder="Initial Date">
-							<mat-error *ngIf="firstDate.invalid && (firstDate.dirty || firstDate.touched)">
-								<span *ngIf="firstDate.errors.required">
-									Initial Date is required.
-								</span>
-							</mat-error>
 						</mat-form-field>
 						<mat-form-field layout="row">
 							<input flex matInput id="lastDate" formControlName="lastDate" type="text" placeholder="Final Date">
-							<mat-error *ngIf="lastDate.invalid && (lastDate.dirty || lastDate.touched)">
-								<span *ngIf="lastDate.errors.required">
-									Final Date is required.
-								</span>
-							</mat-error>
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="option" formControlName="option" type="text" placeholder="Option">
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="langreq" formControlName="langreq" type="text" placeholder="Language Req">
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="langlev" formControlName="langlev" type="text" placeholder="Language Level">
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="sanction" formControlName="sanction" type="text" placeholder="Sanction">
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="periods" formControlName="periods" type="text" placeholder="Periods">
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="fault" formControlName="fault" type="text" placeholder="Fault">
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="initdate" formControlName="initdate" type="text" placeholder="First date Sanction">
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="faultdate" formControlName="faultdate" type="text" placeholder="Fault date">
+						</mat-form-field>
+						<mat-form-field layout="row">
+							<input flex matInput id="processId" formControlName="processId" type="text" placeholder="Process Id">
 						</mat-form-field>
 					</div>
 				</form>

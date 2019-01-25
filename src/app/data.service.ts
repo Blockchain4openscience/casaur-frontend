@@ -52,7 +52,7 @@ export class DataService<Type> {
 
 	public add(ns: string, asset: Type): Observable<Type> {
 		console.log('Entered DataService add');
-		console.log('Add ' + ns);
+		console.log('Add ' + this.actionUrl+ns);
 		console.log('asset', asset);
 
 		return this.httpClient.post(this.actionUrl + ns, asset, {observe: 'response'})

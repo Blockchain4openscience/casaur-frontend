@@ -110,8 +110,6 @@ export class AddRosterComponent implements OnInit {
 					})
 			};
 
-			console.log(this.Transaction.recipientsInfo);
-
 			if (successfulParse)
 			{
 				this.serviceAddRoster.addTransaction(this.Transaction)

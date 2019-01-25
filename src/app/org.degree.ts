@@ -22,6 +22,11 @@ import {Certificate} from './composer.blockcerts';
       recipientProfile: RecipientProfile;
       hash: string;
    }
+   export class PersonalizeCertificate extends Transaction {
+      templateId: CertificateTemplate;
+      administrator: Administrator;
+      recipientsInfo: RecipientInfo[];
+   }
    export class AddRoster extends Transaction {
       templateId: CertificateTemplate;
       administrator: Administrator;

@@ -38,7 +38,7 @@ export class SelectTypeComponent implements OnInit {
 	private Transaction;
 	private errorMessage;
 	private successMessage;
-
+	
 	constructor(private loadingService: TdLoadingService,
 							private authService: AuthService,
 							private router: Router,
@@ -70,34 +70,36 @@ export class SelectTypeComponent implements OnInit {
 
 	openIssueCertificateDialog(): void {
 		if (this.myForm.valid) {
-			switch (this.certificateType.value) {
-				case 'ParticipacionPrograma':
-				{
-					const dialogRef = this.createCertificateDialog.open(IssueCertificateDialogComponent);
-					dialogRef.afterClosed().subscribe(result => {
-						if (result && result.update) {
-							//this.loadAll();
-						}
-					}, error => {
-						console.error(error);
-					});
-				}
-				break;
-
-				case 'RequisitoIdioma':
-				{
-					
-				}
-				break;
-
-				case 'SancionDisciplinaria':
-				{
-					
-				}
-				break;
-			}
 			
-		}else
+			const dialogRef = this.createCertificateDialog.open(IssueCertificateDialogComponent, { 
+				data:{ 
+					tempId: this.templateId.value,
+					certType: this.certificateType.value
+				}
+			});
+			dialogRef.afterClosed()
+				.subscribe((result) => {
+					if (result && result.update) {
+						this.errorMessage = null;
+						this.myForm.reset();
+						this.successMessage = `Successfully issued certificate`;
+						this.resolveLoading();
+					}
+					else
+					{
+						this.myForm.reset();
+						this.successMessage = null;
+					}
+				}, (error) => {
+					console.error(error);
+				if (error === 'Server error') {
+					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+				} else {
+					this.errorMessage = 'Check information submitted';
+				}
+			});
+		}
+		else
 		{
 			Object.keys(this.myForm.controls).forEach(field => {
 				const control = this.myForm.get(field);
