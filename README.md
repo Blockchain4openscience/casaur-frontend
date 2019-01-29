@@ -28,13 +28,13 @@ Follow *step six* to import the business network card for the Hyperledger Fabric
 `````
 composer card import -f PeerAdmin@fabric-network.card
 `````
-In *step seven* we install the Hyperledger Composer business network onto the Hyperledger Fabric peer nodes. The business network `casaur` is defined in bna file, `casaur@0.0.1.bna` and its located in the repository. A forlder with the specific business network model files, scripts and queries that are packaged in the bna file (using `composer archive create`) is located in the [casaur repository](https://github.com/Blockchain4openscience/casaur). 
+In *step seven* we install the Hyperledger Composer business network onto the Hyperledger Fabric peer nodes. The business network `casaur` is defined in bna file, `casaur@0.0.2.bna` and its located in the repository. A forlder with the specific business network model files, scripts and queries that are packaged in the bna file (using `composer archive create`) is located in the [casaur repository](https://github.com/Blockchain4openscience/casaur). 
 `````
-composer network install -c PeerAdmin@fabric-network -a casaur@0.0.1.bna
+composer network install -c PeerAdmin@fabric-network -a casaur@0.0.2.bna
 `````
 In *step eight* we start the blockchain business network
 `````
-composer network start --networkName casaur --networkVersion 0.0.1 -A admin -S adminpw -c PeerAdmin@fabric-network
+composer network start --networkName casaur --networkVersion 0.0.2 -A admin -S adminpw -c PeerAdmin@fabric-network
 `````
 In *step nine* we import the business network card for the business network administrator
 `````
