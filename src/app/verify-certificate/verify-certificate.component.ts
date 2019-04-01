@@ -9,6 +9,8 @@ import {AuthService} from '../auth/auth.service'
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {CertificateTemplate} from '../org.degree';
+import {MatDialog} from '@angular/material';
+import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
 
 declare var require: any;
 
@@ -54,6 +56,7 @@ export class VerifyCertificateComponent implements OnInit {
 	];
 
 	constructor(private verifyCertificateService: VerifyCertificateService,
+				public createCertificateDialog: MatDialog,
 				private loadingService: TdLoadingService,
 				private certificateTemplateService: CertificateTemplateService,
 				private authService: AuthService,
@@ -76,6 +79,16 @@ export class VerifyCertificateComponent implements OnInit {
 		} else {
 			  this.router.navigate(['/verify-certificate']);
 		}
+	}
+
+	openWarningDialog(): void {			
+		let dialogRef = this.createCertificateDialog.open(WarningDialogComponent, { 
+			data: {Id: this.certId}
+		});
+		dialogRef.afterClosed().subscribe(result => {
+			console.log(`Dialog closed: ${result}`);
+			this.ngOnInit();
+		});
 	}
 
 	/**
@@ -126,7 +139,8 @@ export class VerifyCertificateComponent implements OnInit {
 					if (error === 'Server error') {
 						this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
 					} else {
-						this.errorMessage = error;
+						//this.errorMessage = error;
+						this.openWarningDialog();
 					}
 					this.resolveLoading();
 				}, () => {

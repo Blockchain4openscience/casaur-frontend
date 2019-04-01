@@ -33,6 +33,7 @@ import {SelectTypeComponent} from './SelectType/SelectType.component'
 import { AuthCallbackComponent } from './auth/auth-callback/auth-callback.component';
 import { AuthSignupComponent } from './auth/auth-signup/auth-signup.component';
 import { CookieService } from 'ngx-cookie-service';
+import { WarningDialogComponent } from './verify-certificate/warning-dialog/warning-dialog.component';
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
@@ -48,11 +49,13 @@ import { CookieService } from 'ngx-cookie-service';
 		CreateCertificateTemplateDialogComponent,
 		IssueCertificateDialogComponent,
 		AuthCallbackComponent,
-		AuthSignupComponent
+		AuthSignupComponent,
+		WarningDialogComponent
 	],
 	entryComponents: [
 		CreateCertificateTemplateDialogComponent,
-		IssueCertificateDialogComponent
+		IssueCertificateDialogComponent,
+		WarningDialogComponent
 	],
 	imports: [
 		BrowserModule,
